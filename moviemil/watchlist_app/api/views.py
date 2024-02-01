@@ -1,17 +1,46 @@
-from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from watchlist_app.api.serializers import MovieSerializer
 from watchlist_app.models import Movie
 
 
+@api_view(['GET', 'POST'])
 def movie_list(request):
-    movies = Movie.objects.all()
-    serializer = MovieSerializer(movies, many=True)
+    if request.method == 'GET':
+        movies = Movie.objects.all()
+        serializer = MovieSerializer(movies, many=True)
+        return Response(serializer.data)
 
-    return JsonResponse(serializer.data, safe=False)
+    if request.method == 'POST':
+        serializer = MovieSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
 
 
+@api_view(['GET', 'PUT', 'DELETE'])
 def get_movie_by_id(request, movie_id):
-    movie = Movie.objects.get(pk=movie_id)
-    serializer = MovieSerializer(movie)
+    if request.method == 'GET':
+        try:
+            movie = Movie.objects.get(pk=movie_id)
+            serializer = MovieSerializer(movie)
 
-    return JsonResponse(serializer.data)
+            return Response(serializer.data)
+        except:
+            return Response(status=404)
+
+    if request.method == 'PUT':
+        movie = Movie.objects.get(pk=movie_id)
+        serializer = MovieSerializer(movie, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+    if request.method == 'DELETE':
+        movie = Movie.objects.get(pk=movie_id)
+        movie.delete()
+        return Response(status=204)

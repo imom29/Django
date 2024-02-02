@@ -1,0 +1,131 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+repos:
+  - repo: https://github.com/radix-ai/auto-smart-commit
+    rev: v1.0.3
+    hooks:
+      - id: auto-smart-commit
+
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.19.1
+    hooks:
+      - id: gitlint # Git commit message linter
+        args: ["--msg-filename", "$GITLINT_COMMIT_MSG_FILE"]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace # Trims trailing whitespace
+      - id: end-of-file-fixer # Makes sure files end in a newline and only a newline
+      - id: check-yaml # Check YAML syntax
+      - id: check-added-large-files # Check for large files
+        args: [--maxkb=500]
+      - id: check-json # Check JSON syntax
+      - id: check-xml # Check XML syntax (only checks syntax, not validity)
+      - id: requirements-txt-fixer # Fixup requirements.txt files
+      - id: mixed-line-ending # Check for mixed line endings
+      # - id: no-commit-to-branch
+      #   args: [--branch, main, --branch, develop] # Prevents commits to main and develop branches
+
+  - repo: https://github.com/sirwart/ripsecrets
+    rev: v0.1.7
+    hooks:
+      - id: ripsecrets # Rip secrets from files
+
+  - repo: https://gitlab.com/adam-moss/pre-commit-trailer
+    rev: v1.1.0
+    hooks:
+      - id: add-pre-commit-config-trailer # Add a pre-commit config trailer to files
+      - id: add-pre-commit-user-skipped-trailer # Add a pre-commit user skipped trailer to files
+  # - repo: https://github.com/detailyang/pre-commit-shell
+  #   rev: 1.0.5
+  #   hooks:
+  #     - id: shell-lint
+
+  - repo: https://github.com/IamTheFij/docker-pre-commit
+    rev: v3.0.1
+    hooks:
+      - id: docker-compose-check # Dockerfile linter
+        args: ["--ignore DL3008"]
+
+  - repo: https://github.com/pryorda/dockerfilelint-precommit-hooks
+    rev: v0.1.0
+    hooks:
+      - id: dockerfilelint # Dockerfile linter
+
+  - repo: https://github.com/MarcoGorelli/absolufy-imports
+    rev: v0.3.1
+    hooks:
+      - id: absolufy-imports # Absolufy imports
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort # isort - A Python utility / library to sort imports.
+        args: ["--profile", "black", "--line-length", "100"]
+
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v1.6.1
+  #   hooks:
+  #     - id: mypy
+  #       args: [
+  #           "--install-types",
+  #           --strict,
+  #           --ignore-missing-imports,
+  #           --allow-untyped-defs,
+  #           --allow-untyped-calls,
+  #           --no-namespace-packages,
+  #           "--non-interactive",
+  #         ] # mypy - Check Python types
+  #       additional_dependencies: ["types-Flask"]
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.3
+    hooks:
+      - id: prettier
+        args: [--prose-wrap=always, --print-width=100]
+
+  - repo: https://github.com/DanielNoord/pydocstringformatter
+    rev: v0.7.3
+    hooks:
+      - id: pydocstringformatter
+        args: ["--max-summary-lines=2", "--linewrap-full-docstring"]
+        files: "pylint"
+
+  - repo: https://github.com/psf/black
+    rev: 23.10.1
+    hooks:
+      - id: black
+        language_version: python3.10 # Black - The uncompromising Python code formatter
+        args: [--line-length=100]
+
+  # - repo: https://github.com/PyCQA/flake8
+  #   rev: 6.1.0
+  #   hooks:
+  #     - id: flake8
+  #       additional_dependencies: [flake8-bugbear]
+  #       args: [--max-line-length=100] # flake8 - Python style guide checker
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        args: ["-r", "-lll"]
+
+  # - repo: local
+  #   hooks:
+  #     - id: pylint
+  #       name: pylint
+  #       entry: pylint
+  #       language: system
+  #       types: [python]
+  #       args: [
+  #           "-rn", # Only display messages
+  #           "-sn", # Don't display the score
+  #           # '--rcfile=.pylintrc',
+  #         ]
+  #       exclude: |
+  #         (?x)(
+  #             ^migrations/
+  #         )

@@ -2,10 +2,13 @@ pc:
 	pre-commit run --all-files
 
 run:
-	python manage.py runserver
+	python3 manage.py runserver
 
 makemigrations:
-	python manage.py makemigrations
+	python3 manage.py makemigrations
 
 migrate:
-	python manage.py migrate
+	python3 manage.py migrate
+
+createsuperuser:
+	python3 manage.py createsuperuser

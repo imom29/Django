@@ -20,3 +20,16 @@ class StreamPlatform(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+class Reviews(models.Model):
+    review_username = models.CharField(max_length=50)
+    rating = models.PositiveIntegerField()
+    description = models.CharField(max_length=200, null=True)
+    watchlist = models.ForeignKey(
+        Watchlist, on_delete=models.CASCADE, related_name="reviews"
+    )
+
+    def __str__(self):
+        return str(self.rating)
